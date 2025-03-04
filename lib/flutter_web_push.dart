@@ -1,19 +1,30 @@
-import 'dart:js' as js;
+@JS()
+library flutter_web_push;
+
+import 'dart:async';
+import 'dart:convert';
+import 'package:js/js.dart';
+
+@JS('webPush.init')
+external void jsInit(String serviceWorkerPath, String publicVapidKey);
+
+@JS('webPush.subscribe')
+external String jsSubscribe();
+
+@JS('webPush.unsubscribe')
+external bool jsUnsubscribe();
 
 class FlutterWebPush {
-  /// Инициализация Web Push
-  static Future<void> initialize() async {
-    js.context.callMethod('initializeWebPush');
+  static Future<void> init(String serviceWorkerPath, String publicVapidKey) async {
+    jsInit(serviceWorkerPath, publicVapidKey);
   }
 
-  /// Подписка на уведомления, возвращает subscription объект
-  static Future<String?> subscribe() async {
-    final subscription = js.context.callMethod('subscribeToPush');
-    return subscription as String?;
+  static Future<Map<String, dynamic>> subscribe() async {
+    final jsonStr = jsSubscribe();
+    return jsonDecode(jsonStr);
   }
 
-  /// Отписка от Web Push
-  static Future<void> unsubscribe() async {
-    js.context.callMethod('unsubscribeFromPush');
+  static Future<bool> unsubscribe() async {
+    return jsUnsubscribe();
   }
 }
