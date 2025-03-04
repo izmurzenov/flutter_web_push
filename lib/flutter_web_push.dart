@@ -1,9 +1,19 @@
-import 'dart:js_util';
-import 'dart:js';
+import 'dart:js_interop';
 
-class WebPush {
-  static Future<dynamic> subscribe() async {
-    final promise = context.callMethod('subscribeToPush');
-    return await promiseToFuture(promise);
+/// External JavaScript function to register for remote notifications.
+@JS('subscribeToPush')
+external JSPromise<JSString> _registerForRemoteNotification(
+  final JSString vapidKey,
+);
+
+@override
+Future<String> registerForRemoteNotification(String? vapidKey) async {
+  // Registers for remote notifications using the VAPID key.
+  if (vapidKey == null) {
+    throw ArgumentError(
+      'Vapid key must be specified when using native push on the web.',
+    );
   }
+  final success = await _registerForRemoteNotification(vapidKey.toJS).toDart;
+  return success.toDart;
 }
