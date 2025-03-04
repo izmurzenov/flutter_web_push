@@ -1,9 +1,9 @@
-import 'dart:js_interop';
+import 'dart:js_util';
+import 'dart:js';
 
-@JS('globalThis.subscribeToPushWrapper')
-external JSObject _subscribeToPush();
-
-Future<Object?> subscribeToPush() async {
-  final jsObject = _subscribeToPush();
-  return jsObject as Object?;
+class WebPush {
+  static Future<dynamic> subscribe() async {
+    final promise = context.callMethod('subscribeToPush');
+    return await promiseToFuture(promise);
+  }
 }
