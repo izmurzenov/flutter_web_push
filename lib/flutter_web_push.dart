@@ -1,6 +1,6 @@
 import 'dart:js_interop';
 
-@JS('subscribeToPushWrapper')
+@JS('globalThis.subscribeToPushWrapper')
 external JSObject _subscribeToPush();
 
 Future<Object?> subscribeToPush() async {
