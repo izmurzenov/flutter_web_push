@@ -1,10 +1,9 @@
 import 'dart:js_interop';
 
-@JS()
-external void subscribeToPush();
+@JS('subscribeToPushWrapper')
+external JSObject _subscribeToPush();
 
-class FlutterWebPush {
-  static void subscribe() {
-    subscribeToPush();
-  }
+Future<Object?> subscribeToPush() async {
+  final jsObject = _subscribeToPush();
+  return jsObject as Object?;
 }
